@@ -81,11 +81,8 @@ spot_names = function(vec){
       vec[i] = "Oahu"
     }
   }
-} # not currently in use
-
-
-# test change
-
+  return(vec)
+} 
 
 
 
