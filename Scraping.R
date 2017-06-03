@@ -82,7 +82,11 @@ spot_names = function(vec){
     }
   }
   return(vec)
-} 
+} # not currently in use
+
+
+# test change
+
 
 
 
