@@ -36,43 +36,69 @@ length(spots) - length(reef) - length(point) - length(beach) - length(unknown_ty
 heights = read.csv('Mean-Height.csv', row.names = 1)
 
 
+# parameter vector ------
+
+parameter_vector = c(4,3,2,1,4,3,2,1,2,1)
+parameter_vector = parameter_vector/ sum(parameter_vector)
+density_cutoff = 4
+density_penalty = 0.2
+
+
 # add function for year and spot --------
+
+time1 = Sys.time()
 
 year = 2017
 
-spot = 'Fiji'
+spot = 'MargaretRiver'
 
-# previous years -------
+competitors_vector = c('Hiroto Ohhara','Garrett Parkes','Aritz Aranburu','John John Florence')
 
+
+# data -------
+
+year_0 = get(paste('M_whole',year, sep=''))
 year_1 = get(paste('M_whole',year-1, sep=''))
 year_2 = get(paste('M_whole',year-2, sep=''))
 year_3 = get(paste('M_whole',year-3, sep=''))
 year_4 = get(paste('M_whole',year-4, sep=''))
 
-which_years = c(0,0,0,0)
+which_cols = c(0,0,0,0,1,1,1,1,0,0)
+
+
+
+# only keep competitors
+
+year_0 = year_0[rownames(year_0) %in% competitors_vector,]
+year_1 = year_1[rownames(year_1) %in% competitors_vector,]
+year_2 = year_2[rownames(year_2) %in% competitors_vector,]
+year_3 = year_3[rownames(year_3) %in% competitors_vector,]
+year_4 = year_1[rownames(year_4) %in% competitors_vector,]
+
+# previous years
 
 if(spot %in% colnames(year_1)){
   col_1 = matrix(year_1[,spot]/25, nrow = dim(year_1)[1], ncol = 1)
   rownames(col_1) = rownames(year_1)
-  which_years[1] = 1
+  which_cols[1] = 1
 }
 
 if(spot %in% colnames(year_2)){
   col_2 = matrix(year_2[,spot]/25, nrow = dim(year_2)[1], ncol = 1)
   rownames(col_2) = rownames(year_2)
-  which_years[2] = 1
+  which_cols[2] = 1
 }
 
 if(spot %in% colnames(year_3)){
   col_3 = matrix(year_3[,spot]/25, nrow = dim(year_3)[1], ncol = 1)
   rownames(col_3) = rownames(year_3)
-  which_years[3] = 1
+  which_cols[3] = 1
 }
 
 if(spot %in% colnames(year_4)){
   col_4 = matrix(year_4[,spot]/25, nrow = dim(year_4)[1], ncol = 1)
   rownames(col_4) = rownames(year_4)
-  which_years[4] = 1
+  which_cols[4] = 1
 }
 
 
@@ -142,5 +168,69 @@ col_8 = matrix(rowMeans(new_year_4, na.rm = T)/50, nrow = dim(new_year_4)[1], nc
 rownames(col_8) = rownames(new_year_4)
 
 
+# Form Scores:
+
+spot_index = grep(spot, colnames(year_0))
+
+if(spot_index == 2){
+  col_9 = matrix(year_0[,1]/25, nrow = dim(year_0)[1], ncol=1)
+  rownames(col_9) = rownames(year_0)
+  which_cols[9] = 1
+}
+
+if(spot_index > 2){
+  col_9 = matrix(year_0[,spot_index-1]/25, nrow = dim(year_0)[1], ncol=1)
+  rownames(col_9) = rownames(year_0)
+  col_10 = matrix(year_0[,spot_index-2]/25, nrow = dim(year_0)[1], ncol=1)
+  rownames(col_10) = rownames(year_0)
+  which_cols[10] = 1
+}
+
+# combining -------
+
+merge_cols = matrix(nrow = 1,ncol=1)
+rownames(merge_cols) = c('empty')
 
 
+for(i in 1:10){
+  if(which_cols[i] == 1){
+    col_use = get(paste('col_',i,sep=''))
+    colnames(col_use) = paste('col_',i,sep='')
+    merge_cols = merge(merge_cols,col_use,by = 'row.names',all.x = T, all.y = T)
+    rownames(merge_cols) = merge_cols[,1]
+    merge_cols = merge_cols[,-1]
+  }
+}
+
+merge_cols = merge_cols[,-1]
+merge_cols = merge_cols[-which(rownames(merge_cols) == 'empty'),]
+
+
+parameter_vector = parameter_vector * which_cols
+parameter_vector = parameter_vector[! parameter_vector %in% c(0)]
+parameter_vector = parameter_vector/ sum(parameter_vector)
+
+data_density = matrix(nrow = dim(merge_cols)[1], ncol = 1)
+rownames(data_density) = rownames(merge_cols)
+
+for(i in 1:dim(merge_cols)[1]){
+  merge_cols[i,] = merge_cols[i,] * parameter_vector
+  data_density[i,] = sum(! is.na(merge_cols[i,]))
+}
+
+predict = matrix(rowMeans(merge_cols, na.rm = T), nrow = dim(merge_cols)[1], ncol = 1)
+rownames(predict) = rownames(merge_cols)
+
+predict = predict + (data_density <= 4)*density_penalty
+predict = data.frame(predict)
+predict = predict[order(predict[,1]), ,drop = F]
+predict
+
+
+
+((Sys.time() - time1)* 10000)/(60*60)
+
+
+# potential issue, if a surfer has only been in one other contest which is similar to the 
+# sontest of interest in only 1 catergory, then that similarty score is only half,
+# even though for them its the most similar event
