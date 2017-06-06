@@ -1,14 +1,19 @@
-remove(list=ls(all=TRUE))
+
 library(rvest)
 
-# Spot function --------
-
-source('spot_names.R')
 
 # Mens ------
 
-for(year in 2010:2017){
+  remove(list=ls(all=TRUE))
+  
+  source('spot_names.R')
 
+  for(year in 2010:2017){
+    
+      if(exists('complete')){
+        remove(complete)
+      }
+    
       rankings_url = paste('http://www.worldsurfleague.com/athletes/tour/mct?year=', year, sep='')
       
       rankings = read_html(rankings_url)
@@ -129,24 +134,50 @@ for(year in 2010:2017){
         
         colnames(res3) = spots
         res4 = res3
-        complete <<- rbind(results3, res4)
+        complete =  rbind(results3, res4)
+        
+        if(year == 2010){
+          colnames(complete)[9] = 'SanFrancisco'
+        }
+        if(year == 2011){
+          colnames(complete)[10] = 'Isabela'
+        }
+
         setwd('/Users/Billy/Surfistical 4.0/Mens')
         write.csv(complete,file = paste(paste('whole',year,sep=''),'.csv', sep = ''))
         setwd('/Users/Billy/Surfistical 4.0')
       }
       if(!exists('complete')){
-        complete<<-results3
+        
+        complete = results3
+        
+        if(year == 2010){
+          colnames(complete)[9] = 'SanFrancisco'
+        }
+        if(year == 2011){
+          colnames(complete)[10] = 'Isabela'
+        }
+        
         setwd('/Users/Billy/Surfistical 4.0/Mens')
         write.csv(complete,file = paste(paste('whole',year,sep=''),'.csv', sep = ''))
         setwd('/Users/Billy/Surfistical 4.0')
       }
-      print(paste(year, 'completed.'))
+      print(paste(year, 'Mens completed.'))
+
 }
 
 
 # Womens ------
 
+remove(list=ls(all=TRUE))
+
+source('spot_names.R')
+
 for(year in 2010:2017){
+  
+  if(exists('complete')){
+    remove(complete)
+  }
   
   rankings_url = paste('http://www.worldsurfleague.com/athletes/tour/wct?year=', year, sep='')
   
@@ -268,17 +299,21 @@ for(year in 2010:2017){
     
     colnames(res3) = spots
     res4 = res3
-    complete <<- rbind(results3, res4)
+    complete =  rbind(results3, res4)
+    
     setwd('/Users/Billy/Surfistical 4.0/Womens')
     write.csv(complete,file = paste(paste('whole',year,sep=''),'.csv', sep = ''))
     setwd('/Users/Billy/Surfistical 4.0')
   }
   if(!exists('complete')){
-    complete<<-results3
+    
+    complete = results3
+
     setwd('/Users/Billy/Surfistical 4.0/Womens')
     write.csv(complete,file = paste(paste('whole',year,sep=''),'.csv', sep = ''))
     setwd('/Users/Billy/Surfistical 4.0')
   }
-  print(paste(year, 'completed.'))
+  print(paste(year, 'Womens completed.'))
+  
 }
 
