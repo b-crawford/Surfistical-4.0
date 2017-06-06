@@ -224,8 +224,19 @@ rownames(predict) = rownames(merge_cols)
 predict = predict + (data_density <= 4)*density_penalty
 predict = data.frame(predict)
 predict = predict[order(predict[,1]), ,drop = F]
+predict = predict[! rownames(predict) == 'NA' , , drop = F]
 predict
 
+
+
+predict[1,] = 1
+predict[2,] = 2
+predict[3:4,] = 3
+predict[5:8,] = 5
+predict[9:12,] = 9
+predict[13:24,] = 13
+predict[25:length(predict),] = 25
+predict
 
 
 ((Sys.time() - time1)* 10000)/(60*60)
