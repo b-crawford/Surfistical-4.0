@@ -1,21 +1,24 @@
+library(stats)
 remove(list=ls(all=TRUE))
 
 wd = getwd()
 setwd(paste(wd,'/Mens',sep=''))
-M_whole2010 = read.csv('whole2010.csv', row.names = 1)
-M_whole2011 = read.csv('whole2011.csv', row.names = 1)
-M_whole2012 = read.csv('whole2012.csv', row.names = 1)
-M_whole2013 = read.csv('whole2013.csv', row.names = 1)
-M_whole2014 = read.csv('whole2014.csv', row.names = 1)
-M_whole2015 = read.csv('whole2015.csv', row.names = 1)
-M_whole2016 = read.csv('whole2016.csv', row.names = 1)
-M_whole2017 = read.csv('whole2017.csv', row.names = 1)
+whole2010 = read.csv('whole2010.csv', row.names = 1)
+whole2011 = read.csv('whole2011.csv', row.names = 1)
+whole2012 = read.csv('whole2012.csv', row.names = 1)
+whole2013 = read.csv('whole2013.csv', row.names = 1)
+whole2014 = read.csv('whole2014.csv', row.names = 1)
+whole2015 = read.csv('whole2015.csv', row.names = 1)
+whole2016 = read.csv('whole2016.csv', row.names = 1)
+whole2017 = read.csv('whole2017.csv', row.names = 1)
 setwd(wd)
+
+
 
 # Spot characterstic lists  ----------
 spots = c()
 for(i in 0:7){
-  data_set = get(paste('M_whole201',i,sep = ''))
+  data_set = get(paste('whole201',i,sep = ''))
   for(j in 1:dim(data_set)[2]){
     spots[100*i + j] = colnames(data_set)[j]
   }
@@ -44,29 +47,32 @@ parameter_vector = c(4,3,2,1,4,3,2,1,2,1)
 parameter_vector = parameter_vector/ sum(parameter_vector)
 density_cutoff = 4
 density_penalty = 0.2
+density_vector = c(density_cutoff,density_penalty)
 
 
-# add function for year and spot --------
 
-time1 = Sys.time()
+# processing ----
 
-year = 2017
 
-spot = 'MargaretRiver'
 
-setwd(paste(wd,'/Competitors/Mens',sep=''))
-competitors_vector = read.csv(paste(paste(spot,year,sep=''),'.csv',sep=''), row.names = 1, stringsAsFactors = F)[,1]
+single_event = function(year, spot){
+  
+
+setwd(paste(wd,'/Competitors_2/Mens',sep=''))
+competitors_vector = rownames(read.csv(paste(paste(spot,year,sep=''),'.csv',sep=''), row.names = 1, stringsAsFactors = F))
+actual = read.csv(paste(paste(spot,year,sep=''),'.csv',sep=''), row.names = 1, stringsAsFactors = F)
 setwd(wd)
 
 # data -------
 
-year_0 = get(paste('M_whole',year, sep=''))
-year_1 = get(paste('M_whole',year-1, sep=''))
-year_2 = get(paste('M_whole',year-2, sep=''))
-year_3 = get(paste('M_whole',year-3, sep=''))
-year_4 = get(paste('M_whole',year-4, sep=''))
+year_0 = get(paste('whole',year, sep=''))
+year_1 = get(paste('whole',year-1, sep=''))
+year_2 = get(paste('whole',year-2, sep=''))
+year_3 = get(paste('whole',year-3, sep=''))
+year_4 = get(paste('whole',year-4, sep=''))
 
 which_cols = c(0,0,0,0,1,1,1,1,0,0)
+
 
 
 
@@ -209,15 +215,15 @@ merge_cols = merge_cols[,-1]
 merge_cols = merge_cols[-which(rownames(merge_cols) == 'empty'),]
 
 
-parameter_vector = parameter_vector * which_cols
-parameter_vector = parameter_vector[! parameter_vector %in% c(0)]
-parameter_vector = parameter_vector/ sum(parameter_vector)
+parameter_vector1 = parameter_vector * which_cols
+parameter_vector1 = parameter_vector1[! parameter_vector1 %in% c(0)]
+parameter_vector1 = parameter_vector1/ sum(parameter_vector1)
 
 data_density = matrix(nrow = dim(merge_cols)[1], ncol = 1)
 rownames(data_density) = rownames(merge_cols)
 
 for(i in 1:dim(merge_cols)[1]){
-  merge_cols[i,] = merge_cols[i,] * parameter_vector
+  merge_cols[i,] = merge_cols[i,] * parameter_vector1
   data_density[i,] = sum(! is.na(merge_cols[i,]))
 }
 
@@ -226,23 +232,45 @@ rownames(predict) = rownames(merge_cols)
 
 predict = predict + (data_density <= 4)*density_penalty
 predict = data.frame(predict)
-predict = predict[order(predict[,1]), ,drop = F]
 predict = predict[! rownames(predict) == 'NA' , , drop = F]
-predict
+
+compare = merge(actual,predict,by = 'row.names',all.x = T)
+rownames(compare) = compare[,1]
+compare = compare[,-1]
+
+compare = compare[order(compare[,2]), ,drop = F]
+compare
+
+compare[1,2] = 1
+compare[2,2] = 2
+compare[3:4,2] = 3
+compare[5:8,2] = 5
+compare[9:12,2] = 9
+compare[13:24,2] = 13
+compare[25:dim(compare)[1],2] = 25
 
 
+square_diff = sum((compare[,1]-compare[,2])^2)
 
-predict[1,] = 1
-predict[2,] = 2
-predict[3:4,] = 3
-predict[5:8,] = 5
-predict[9:12,] = 9
-predict[13:24,] = 13
-predict[25:dim(predict)[1],] = 25
-predict
+square_diff
+
+return(square_diff)
+
+}
 
 
-((Sys.time() - time1)* 10000)/(60*60)
+overall_score = function(parameters, density_v){
+
+  ss2016 = sapply(colnames(whole2016),single_event, year = 2016)
+  ss2015 = sapply(colnames(whole2015),single_event, year = 2015)
+  ss2014 = sapply(colnames(whole2014),single_event, year = 2014)
+  ss = c(ss2016,ss2015,ss2014)
+  return(mean(ss))
+}
+
+overall_score()
+
+
 
 
 # potential issue, if a surfer has only been in one other contest which is similar to the 
