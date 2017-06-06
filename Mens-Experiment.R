@@ -1,14 +1,16 @@
 remove(list=ls(all=TRUE))
 
-M_whole2010 = read.csv('M_whole2010', row.names = 1)
-M_whole2011 = read.csv('M_whole2011', row.names = 1)
-M_whole2012 = read.csv('M_whole2012', row.names = 1)
-M_whole2013 = read.csv('M_whole2013', row.names = 1)
-M_whole2014 = read.csv('M_whole2014', row.names = 1)
-M_whole2015 = read.csv('M_whole2015', row.names = 1)
-M_whole2016 = read.csv('M_whole2016', row.names = 1)
-M_whole2017 = read.csv('M_whole2017', row.names = 1)
-
+wd = getwd()
+setwd(paste(wd,'/Mens',sep=''))
+M_whole2010 = read.csv('whole2010.csv', row.names = 1)
+M_whole2011 = read.csv('whole2011.csv', row.names = 1)
+M_whole2012 = read.csv('whole2012.csv', row.names = 1)
+M_whole2013 = read.csv('whole2013.csv', row.names = 1)
+M_whole2014 = read.csv('whole2014.csv', row.names = 1)
+M_whole2015 = read.csv('whole2015.csv', row.names = 1)
+M_whole2016 = read.csv('whole2016.csv', row.names = 1)
+M_whole2017 = read.csv('whole2017.csv', row.names = 1)
+setwd(wd)
 
 # Spot characterstic lists  ----------
 spots = c()
@@ -25,12 +27,12 @@ spots
 left = c('Fiji', 'Tahiti','Pipeline')
 right = c('GoldCoast','BellsBeach','MargaretRiver','Jbay','Trestles','Bali')
 both = c('Rio','France','Portugal','SantaCruz','SanFrancisco')
-unknown_direction = c('SantaCatarina', 'NewYork')
+unknown_direction = c('SantaCatarina', 'NewYork', 'Isabela')
 length(spots) - length(left) - length(right) - length(both) - length(unknown_direction)
 reef = c('MargaretRiver','Fiji','Tahiti','Pipeline','Bali')
 point = c('GoldCoast','BellsBeach','Jbay','Trestles','France','Portugal','SantaCruz')
 beach = c('SanFrancisco','Rio','Trestles')
-unknown_type = c('SantaCatarina', 'NewYork')
+unknown_type = c('SantaCatarina', 'NewYork', 'Isabela')
 length(spots) - length(reef) - length(point) - length(beach) - length(unknown_type) # trestles in two
 
 heights = read.csv('Mean-Height.csv', row.names = 1)
@@ -52,8 +54,9 @@ year = 2017
 
 spot = 'MargaretRiver'
 
-competitors_vector = c('Hiroto Ohhara','Garrett Parkes','Aritz Aranburu','John John Florence')
-
+setwd(paste(wd,'/Competitors/Mens',sep=''))
+competitors_vector = read.csv(paste(paste(spot,year,sep=''),'.csv',sep=''), row.names = 1, stringsAsFactors = F)[,1]
+setwd(wd)
 
 # data -------
 
@@ -235,7 +238,7 @@ predict[3:4,] = 3
 predict[5:8,] = 5
 predict[9:12,] = 9
 predict[13:24,] = 13
-predict[25:length(predict),] = 25
+predict[25:dim(predict)[1],] = 25
 predict
 
 

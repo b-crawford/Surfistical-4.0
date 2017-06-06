@@ -45,9 +45,6 @@ spot_names = function(vec){
     if(grepl("New York",x = vec[i], fixed = T)==1){
       vec[i] = "NewYork"
     }
-    if(grepl("San Fran",x = vec[i], fixed = T)==1){
-      vec[i] = "SanFrancisco"
-    }
     if(grepl("Cruz",x = vec[i], fixed = T)==1){
       vec[i] = "SantaCruz"
     }
@@ -66,6 +63,9 @@ spot_names = function(vec){
     if(grepl("NZ",x = vec[i], fixed = T)==1){
       vec[i] = "NewZealand"
     }
+    if(grepl("Subaru",x = vec[i], fixed = T)==1){
+      vec[i] = "NewZealand"
+    }
     if(grepl("Beachley",x = vec[i], fixed = T)==1){
       vec[i] = "Beachley"
     }
@@ -76,7 +76,7 @@ spot_names = function(vec){
       vec[i] = "Oahu"
     }
     if(grepl("Rip Curl Search",x = vec[i], fixed = T)==1){
-      vec[i] = "Isabela"
+      vec[i] = "Search"
     }
   }
   return(vec)
