@@ -6,12 +6,9 @@ library(rvest)
 source('spot_names.R') # not currently in use
 
 
-# test change
-
-
-
-
 # Mens ------
+
+
 remove(list=ls(all=TRUE))
 # 2017 results --------------------
 
