@@ -1,11 +1,13 @@
 
 library(rvest)
 
-wd = getwd()
+
 
 # Mens ------
 
   remove(list=ls(all=TRUE))
+
+  wd = getwd()
   
   source('spot_names.R')
 
@@ -38,15 +40,14 @@ wd = getwd()
       results2 = results[-1,-c(1:(name_col+1),end)]
       
       row.names(results2) = names
-    
-      results2[40,]
+  
       
       for(j in 1:dim(results2)[2]){
         for(i in 1:dim(results2)[1]){
           results2[i,j] = gsub('[PointsThrowaway]','', results2[i,j],fixed = F)
           results2[i,j] = gsub('[Points]','', results2[i,j],fixed = F)
           results2[i,j] = gsub('[-]','NA', results2[i,j])
-          results2[i,j] = gsub('[0]','', results2[i,j])
+          results2[i,j] = gsub('[-0]','', results2[i,j], fixed =T)
           results2[i,j] = gsub('[,]','', results2[i,j])
           results2[i,j] = gsub("[[:space:]]", "", results2[i,j])
           if(grepl("INJ",results2[i,j], fixed = T)==1){results2[i,j] = 'NA'}
@@ -109,7 +110,7 @@ wd = getwd()
             res2[i,j] = gsub('[PointsThrowaway]','', res2[i,j],fixed = F)
             res2[i,j] = gsub('[Points]','', res2[i,j],fixed = F)
             res2[i,j] = gsub('[-]','NA', res2[i,j])
-            res2[i,j] = gsub('[0]','', res2[i,j])
+            res2[i,j] = gsub('[-0]','', res2[i,j], fixed = T)
             res2[i,j] = gsub('[,]','', res2[i,j])
             res2[i,j] = gsub("[[:space:]]", "", res2[i,j])
             if(grepl("INJ",res2[i,j], fixed = T)==1){res2[i,j] = 'NA'}
@@ -171,6 +172,8 @@ wd = getwd()
 # Womens ------
 
 remove(list=ls(all=TRUE))
+  
+wd = getwd()
 
 source('spot_names.R')
 
@@ -211,7 +214,7 @@ for(year in 2010:2017){
       results2[i,j] = gsub('[PointsThrowaway]','', results2[i,j],fixed = F)
       results2[i,j] = gsub('[Points]','', results2[i,j],fixed = F)
       results2[i,j] = gsub('[-]','NA', results2[i,j])
-      results2[i,j] = gsub('[0]','', results2[i,j])
+      results2[i,j] = gsub('[-0]','', results2[i,j], fixed =T)
       results2[i,j] = gsub('[,]','', results2[i,j])
       results2[i,j] = gsub("[[:space:]]", "", results2[i,j])
       if(grepl("INJ",results2[i,j], fixed = T)==1){results2[i,j] = 'NA'}
@@ -274,7 +277,7 @@ for(year in 2010:2017){
         res2[i,j] = gsub('[PointsThrowaway]','', res2[i,j],fixed = F)
         res2[i,j] = gsub('[Points]','', res2[i,j],fixed = F)
         res2[i,j] = gsub('[-]','NA', res2[i,j])
-        res2[i,j] = gsub('[0]','', res2[i,j])
+        res2[i,j] = gsub('[-0]','', res2[i,j], fixed = T)
         res2[i,j] = gsub('[,]','', res2[i,j])
         res2[i,j] = gsub("[[:space:]]", "", res2[i,j])
         if(grepl("INJ",res2[i,j], fixed = T)==1){res2[i,j] = 'NA'}
