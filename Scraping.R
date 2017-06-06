@@ -1,6 +1,7 @@
 
 library(rvest)
 
+wd = getwd()
 
 # Mens ------
 
@@ -143,9 +144,9 @@ library(rvest)
           colnames(complete)[10] = 'Isabela'
         }
 
-        setwd('/Users/Billy/Surfistical 4.0/Mens')
+        setwd(paste(wd,'/Mens',sep=''))
         write.csv(complete,file = paste(paste('whole',year,sep=''),'.csv', sep = ''))
-        setwd('/Users/Billy/Surfistical 4.0')
+        setwd(wd)
       }
       if(!exists('complete')){
         
@@ -158,9 +159,9 @@ library(rvest)
           colnames(complete)[10] = 'Isabela'
         }
         
-        setwd('/Users/Billy/Surfistical 4.0/Mens')
+        setwd(paste(wd,'/Mens',sep=''))
         write.csv(complete,file = paste(paste('whole',year,sep=''),'.csv', sep = ''))
-        setwd('/Users/Billy/Surfistical 4.0')
+        setwd(wd)
       }
       print(paste(year, 'Mens completed.'))
 
@@ -301,17 +302,17 @@ for(year in 2010:2017){
     res4 = res3
     complete =  rbind(results3, res4)
     
-    setwd('/Users/Billy/Surfistical 4.0/Womens')
+    setwd(paste(wd,'/Womens',sep=''))
     write.csv(complete,file = paste(paste('whole',year,sep=''),'.csv', sep = ''))
-    setwd('/Users/Billy/Surfistical 4.0')
+    setwd(wd)
   }
   if(!exists('complete')){
     
     complete = results3
 
-    setwd('/Users/Billy/Surfistical 4.0/Womens')
+    setwd(paste(wd,'/Womens',sep=''))
     write.csv(complete,file = paste(paste('whole',year,sep=''),'.csv', sep = ''))
-    setwd('/Users/Billy/Surfistical 4.0')
+    setwd(wd)
   }
   print(paste(year, 'Womens completed.'))
   
