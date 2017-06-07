@@ -43,19 +43,14 @@ heights = read.csv('Mean-Height.csv', row.names = 1)
 
 # parameter vector ------
 
-parameter_vector = c(4,3,2,1,4,3,2,1,2,1)
-parameter_vector = parameter_vector/ sum(parameter_vector)
-density_cutoff = 4
-density_penalty = 0.2
-density_vector = c(density_cutoff,density_penalty)
-
-
+source('find_top_parameters.R')
+p1
 
 # processing ----
 
 
 
-single_event = function(year, spot){
+single_event = function(year, spot, parameters1, density_v1){
   
 
 setwd(paste(wd,'/Competitors_2/Mens',sep=''))
@@ -215,7 +210,7 @@ merge_cols = merge_cols[,-1]
 merge_cols = merge_cols[-which(rownames(merge_cols) == 'empty'),]
 
 
-parameter_vector1 = parameter_vector * which_cols
+parameter_vector1 = parameters1 * which_cols
 parameter_vector1 = parameter_vector1[! parameter_vector1 %in% c(0)]
 parameter_vector1 = parameter_vector1/ sum(parameter_vector1)
 
@@ -230,7 +225,7 @@ for(i in 1:dim(merge_cols)[1]){
 predict = matrix(rowMeans(merge_cols, na.rm = T), nrow = dim(merge_cols)[1], ncol = 1)
 rownames(predict) = rownames(merge_cols)
 
-predict = predict + (data_density <= 4)*density_penalty
+predict = predict + (density_v1[1] <= 4)*density_v1[2]
 predict = data.frame(predict)
 predict = predict[! rownames(predict) == 'NA' , , drop = F]
 
@@ -259,19 +254,47 @@ return(square_diff)
 }
 
 
-overall_score = function(parameters, density_v){
-
-  ss2016 = sapply(colnames(whole2016),single_event, year = 2016)
-  ss2015 = sapply(colnames(whole2015),single_event, year = 2015)
-  ss2014 = sapply(colnames(whole2014),single_event, year = 2014)
+overall_score = function(parameters){
+  ss2016 = sapply(colnames(whole2016),single_event, year = 2016, parameters1 = parameters[1:10], density_v1 = parameters[11:12] )
+  ss2015 = sapply(colnames(whole2015),single_event, year = 2015, parameters1 = parameters[1:10], density_v1 = parameters[11:12] )
+  ss2014 = sapply(colnames(whole2014),single_event, year = 2014, parameters1 = parameters[1:10], density_v1 = parameters[11:12] )
   ss = c(ss2016,ss2015,ss2014)
   return(mean(ss))
 }
 
-overall_score()
+overall_score(p1)
 
 
 
+results = read.csv('results.csv', header=T)[,-1]
+start = which.max(is.na(results[,13]))
+number = 50
+end = start + number - 1
+
+
+for(i in start:end){
+  vec = c()
+  vec[1] = sample(1:10,1)
+  vec[2] = sample(1:vec[1], 1)
+  vec[3] = sample(1:vec[2], 1)
+  vec[4] = sample(1:vec[3], 1)
+  vec[5] = sample(1:10,1)
+  vec[6] = sample(1:vec[5], 1)
+  vec[7] = sample(1:vec[6], 1)
+  vec[8] = sample(1:vec[7], 1)
+  vec[9] = sample(1:10, 1)
+  vec[10] = sample(1:vec[9], 1)
+  vec[11] = sample(1:10,1)
+  vec[12] = runif(1)
+  results[i,13] = overall_score(vec)
+  results[i,1:12] = vec
+  print(paste(((i-start+1)/(number))*100 , '% complete'))
+}
+
+
+write.csv(results,'results.csv')
+
+end
 
 # potential issue, if a surfer has only been in one other contest which is similar to the 
 # sontest of interest in only 1 catergory, then that similarty score is only half,
