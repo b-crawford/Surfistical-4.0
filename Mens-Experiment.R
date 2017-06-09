@@ -264,20 +264,23 @@ overall_score = function(parameters){
 
 overall_score(p1)
 
+repeats = 20
+
+for(j in 1:repeats){
 
 
 results = read.csv('results.csv', header=T)[,-1]
 start = which.max(is.na(results[,13]))
-number = 50
+number = 100
 end = start + number - 1
 
 
 for(i in start:end){
   vec = c()
   vec[1] = sample(1:10,1)
-  vec[2] = sample(1:vec[1], 1)
-  vec[3] = sample(1:vec[2], 1)
-  vec[4] = sample(1:vec[3], 1)
+  vec[2] = sample(1:vec[1],1)
+  vec[3] = sample(1:vec[2],1)
+  vec[4] = sample(1:vec[3],1)
   vec[5] = sample(1:10,1)
   vec[6] = sample(1:vec[5], 1)
   vec[7] = sample(1:vec[6], 1)
@@ -288,13 +291,17 @@ for(i in start:end){
   vec[12] = runif(1)
   results[i,13] = overall_score(vec)
   results[i,1:12] = vec
-  print(paste(((i-start+1)/(number))*100 , '% complete'))
 }
 
 
 write.csv(results,'results.csv')
 
+print(paste(j/repeats , '% complete'))
+
 end
+
+}
+
 
 # potential issue, if a surfer has only been in one other contest which is similar to the 
 # sontest of interest in only 1 catergory, then that similarty score is only half,
