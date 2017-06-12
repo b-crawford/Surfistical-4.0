@@ -1,7 +1,7 @@
 library(rvest)
 library(magrittr)
-remove(list=ls(all=TRUE))
-wd = getwd()
+wd = '/Users/Billy/Surfistical 4.0'
+setwd(wd)
 
 
 
@@ -54,7 +54,7 @@ which_month = function(string){
 
 
 # Mens --------------
-setwd(paste(wd,'/Mens',sep=''))
+
 
 year = as.numeric(format(as.Date(Sys.time(), format="%d/%m/%Y"),"%Y"))
 
@@ -80,7 +80,7 @@ for(i in 1:length(events3)){
     events4[i] = 1 
   }
   if(grepl("Standby",x = events3[i], fixed = T)==1){
-    events4[i] = 0 
+    events4[i] = 1 
   }
 }
 
@@ -102,13 +102,13 @@ start_day = unique(na.omit(as.numeric(unlist(strsplit(unlist(upcoming_date), "[^
 
 mens_go_time = 0
 
-if(start_month == month & start_day - 1 == day){
+if(start_month == month & start_day - 1 <= day){
   mens_go_time = 1
 }
 
 if(mens_go_time == 1){
   # competitors list ------
-  
+  setwd(paste(wd,'/Mens',sep=''))
   names2010 = read.csv('whole2010.csv',stringsAsFactors = F)[,1]
   names2011 = read.csv('whole2011.csv',stringsAsFactors = F)[,1]
   names2012 = read.csv('whole2012.csv',stringsAsFactors = F)[,1]
@@ -117,6 +117,8 @@ if(mens_go_time == 1){
   names2015 = read.csv('whole2015.csv',stringsAsFactors = F)[,1]
   names2016 = read.csv('whole2016.csv',stringsAsFactors = F)[,1]
   names2017 = read.csv('whole2017.csv',stringsAsFactors = F)[,1]
+  setwd(wd)
+  
   
   names = unique(c(names2010,names2011,names2012,names2013,names2014,names2015,names2016,names2017))
   names2 = matrix(nrow = length(names),ncol=2)
@@ -164,12 +166,11 @@ if(mens_go_time == 1){
   mens_competitors = complete
 }
 
-setwd(wd)
+
 
 
 
 # Womens --------------
-setwd(paste(wd,'/Womens',sep=''))
 
 year = as.numeric(format(as.Date(Sys.time(), format="%d/%m/%Y"),"%Y"))
 
@@ -195,7 +196,7 @@ for(i in 1:length(events3)){
     events4[i] = 1 
   }
   if(grepl("Standby",x = events3[i], fixed = T)==1){
-    events4[i] = 0 
+    events4[i] = 1 
   }
 }
 
@@ -217,14 +218,14 @@ start_day = unique(na.omit(as.numeric(unlist(strsplit(unlist(upcoming_date), "[^
 
 womens_go_time = 0
 
-if(start_month == month & start_day - 1 == day){
+if(start_month == month & start_day - 1 <=day){
   womens_go_time = 1
 }
 
 if(womens_go_time == 1){
   
   # competitors list ------
-  
+  setwd(paste(wd,'/Womens',sep=''))
   names2010 = read.csv('whole2010.csv',stringsAsFactors = F)[,1]
   names2011 = read.csv('whole2011.csv',stringsAsFactors = F)[,1]
   names2012 = read.csv('whole2012.csv',stringsAsFactors = F)[,1]
@@ -233,6 +234,7 @@ if(womens_go_time == 1){
   names2015 = read.csv('whole2015.csv',stringsAsFactors = F)[,1]
   names2016 = read.csv('whole2016.csv',stringsAsFactors = F)[,1]
   names2017 = read.csv('whole2017.csv',stringsAsFactors = F)[,1]
+  setwd(wd)
   
   names = unique(c(names2010,names2011,names2012,names2013,names2014,names2015,names2016,names2017))
   names2 = matrix(nrow = length(names),ncol=2)
