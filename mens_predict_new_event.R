@@ -1,7 +1,9 @@
 library(stats)
+library(tableHTML)
+library(magrittr)
 remove(list=ls(all=TRUE))
 
-wd = getwd()
+wd = '/Users/Billy/Surfistical 4.0'
 setwd(paste(wd,'/Mens',sep=''))
 whole2010 = read.csv('whole2010.csv', row.names = 1)
 whole2011 = read.csv('whole2011.csv', row.names = 1)
@@ -56,7 +58,7 @@ p1
 
 
 
-predict_new_mens = function(year, spot, parameters1, density_v1,competitors_vector){
+predict_new = function(year, spot, parameters1, density_v1,competitors_vector){
   
   # data -------
   
@@ -243,12 +245,19 @@ predict_new_mens = function(year, spot, parameters1, density_v1,competitors_vect
 
 
 # mens ----
-if(mens_go_time ==1){
-predict_new(year, upcoming_mens, parameters1 = p1[1:10], density_v1 = p1[11:12], mens_competitors)
+if(mens_go_time == 1 ){
+table = predict_new(year, upcoming_mens, parameters1 = p1[1:10], density_v1 = p1[11:12], mens_competitors)
+table2 = matrix(nrow = length(mens_competitors), ncol = 2 )
+table2[,1] = rownames(table)
+table2[,2] = table[,1]
+colnames(table2) = c(paste(upcoming_mens,year),'Predicted Results')
+table2 = tableHTML(table2, rownames = F, border = 0, spacing  ='4px') 
+table2 = add_css_table(table2, list('font-family','Josefin Slab'))
+table2 = add_css_column(table2, list('text-align', 'center'), 2)
+table2 = add_css_header(table2, list('font-size', '20px'), c(1,2))
+setwd(paste(wd,'/Webpage',sep=''))
+write_tableHTML(table2,file = 'M_current_event.html')
+setwd(wd)
 }
 
-# womens ----
-if(womens_go_time ==1){
-  predict_new(year, upcoming_womens, parameters1 = p1[1:10], density_v1 = p1[11:12], womens_competitors)
-}
 
