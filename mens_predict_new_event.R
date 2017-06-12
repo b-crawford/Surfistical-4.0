@@ -4,6 +4,7 @@ library(magrittr)
 remove(list=ls(all=TRUE))
 
 wd = '/Users/Billy/Surfistical 4.0'
+webwd = '/Users/Billy/Desktop/WHTcrawford.github.io'
 setwd(paste(wd,'/Mens',sep=''))
 whole2010 = read.csv('whole2010.csv', row.names = 1)
 whole2011 = read.csv('whole2011.csv', row.names = 1)
@@ -39,8 +40,8 @@ both = c('Rio','France','Portugal','SantaCruz','SanFrancisco')
 unknown_direction = c('SantaCatarina', 'NewYork', 'Isabela')
 length(spots) - length(left) - length(right) - length(both) - length(unknown_direction)
 reef = c('MargaretRiver','Fiji','Tahiti','Pipeline','Bali')
-point = c('GoldCoast','BellsBeach','Jbay','Trestles','France','Portugal','SantaCruz')
-beach = c('SanFrancisco','Rio','Trestles')
+point = c('GoldCoast','BellsBeach','Jbay','Trestles')
+beach = c('SanFrancisco','Rio','Trestles','France','Portugal','SantaCruz')
 unknown_type = c('SantaCatarina', 'NewYork', 'Isabela')
 length(spots) - length(reef) - length(point) - length(beach) - length(unknown_type) # trestles in two
 
@@ -231,7 +232,7 @@ predict_new = function(year, spot, parameters1, density_v1,competitors_vector){
   predict = data.frame(predict)
   predict = predict[! rownames(predict) == 'NA' , , drop = F]
   predict = predict[order(predict[,1]), ,drop = F]
- 
+  
   predict[1,1] = 1
   predict[2,1] = 2
   predict[3:4,1] = 3
@@ -246,18 +247,18 @@ predict_new = function(year, spot, parameters1, density_v1,competitors_vector){
 
 # mens ----
 if(mens_go_time == 1 ){
-table = predict_new(year, upcoming_mens, parameters1 = p1[1:10], density_v1 = p1[11:12], mens_competitors)
-table2 = matrix(nrow = length(mens_competitors), ncol = 2 )
-table2[,1] = rownames(table)
-table2[,2] = table[,1]
-colnames(table2) = c(paste(upcoming_mens,year),'Predicted Results')
-table2 = tableHTML(table2, rownames = F, border = 0, spacing  ='4px') 
-table2 = add_css_table(table2, list('font-family','Josefin Slab'))
-table2 = add_css_column(table2, list('text-align', 'center'), 2)
-table2 = add_css_header(table2, list('font-size', '20px'), c(1,2))
-setwd(paste(wd,'/Webpage',sep=''))
-write_tableHTML(table2,file = 'M_current_event.html')
-setwd(wd)
+  table = predict_new(year, upcoming_mens, parameters1 = p1[1:10], density_v1 = p1[11:12], mens_competitors)
+  table2 = matrix(nrow = length(mens_competitors), ncol = 2 )
+  table2[,1] = rownames(table)
+  table2[,2] = table[,1]
+  colnames(table2) = c(paste(upcoming_mens,year),'Predicted Results')
+  table2 = tableHTML(table2, rownames = F, border = 0, spacing  ='4px') 
+  table2 = add_css_table(table2, list('font-family','Josefin Slab'))
+  table2 = add_css_column(table2, list('text-align', 'center'), 2)
+  table2 = add_css_header(table2, list('font-size', '20px'), c(1,2))
+  setwd(webwd)
+  write_tableHTML(table2,file = 'M_current_event.html')
+  setwd(wd)
 }
 
 
