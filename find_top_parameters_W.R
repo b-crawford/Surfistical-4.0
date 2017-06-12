@@ -1,4 +1,4 @@
-find_top = read.csv('results.csv', header=T)[,-1]
+find_top = read.csv('results_W.csv', header=T)[,-1]
 
 find_top = find_top[! is.na(find_top[,13]),]
 

@@ -3,8 +3,6 @@ library(magrittr)
 wd = '/Users/Billy/Surfistical 4.0'
 setwd(wd)
 
-
-
 # Spot names function ---------
 
 source('spot_names.R')
@@ -51,10 +49,7 @@ which_month = function(string){
   return(return_number)
 }
 
-
-
-# Mens --------------
-
+# Womens --------------
 
 year = as.numeric(format(as.Date(Sys.time(), format="%d/%m/%Y"),"%Y"))
 
@@ -62,7 +57,7 @@ month = as.numeric(format(as.Date(Sys.time(), format="%d/%m/%Y"),"%m"))
 
 day = as.numeric(format(as.Date(Sys.time(), format="%d/%m/%Y"),"%d"))
 
-event_url = paste('http://www.worldsurfleague.com/events/',paste(year,'/mct', sep = ''),sep = '')
+event_url = paste('http://www.worldsurfleague.com/events/',paste(year,'/wct', sep = ''),sep = '')
 
 events = read_html(event_url)
 
@@ -92,7 +87,7 @@ spots = html_nodes(events,'.tour-event-name')
 
 spots = html_text(spots) 
 
-upcoming_mens = spot_names(spots)[upcoming_index]
+upcoming_womens = spot_names(spots)[upcoming_index]
 
 upcoming_date = events3[upcoming_index]
 
@@ -100,15 +95,16 @@ start_month = which_month(upcoming_date)
 
 start_day = unique(na.omit(as.numeric(unlist(strsplit(unlist(upcoming_date), "[^0-9]+")))))[1]
 
-mens_go_time = 0
+womens_go_time = 0
 
-if(start_month == month & start_day - 1 <= day){
-  mens_go_time = 1
+if(start_month == month & start_day - 1 <=day){
+  womens_go_time = 1
 }
 
-if(mens_go_time == 1){
+if(womens_go_time == 1){
+  
   # competitors list ------
-  setwd(paste(wd,'/Mens',sep=''))
+  setwd(paste(wd,'/Womens',sep=''))
   names2010 = read.csv('whole2010.csv',stringsAsFactors = F)[,1]
   names2011 = read.csv('whole2011.csv',stringsAsFactors = F)[,1]
   names2012 = read.csv('whole2012.csv',stringsAsFactors = F)[,1]
@@ -118,7 +114,6 @@ if(mens_go_time == 1){
   names2016 = read.csv('whole2016.csv',stringsAsFactors = F)[,1]
   names2017 = read.csv('whole2017.csv',stringsAsFactors = F)[,1]
   setwd(wd)
-  
   
   names = unique(c(names2010,names2011,names2012,names2013,names2014,names2015,names2016,names2017))
   names2 = matrix(nrow = length(names),ncol=2)
@@ -157,14 +152,20 @@ if(mens_go_time == 1){
     complete[i] = convert(comp[i])
   }
   
-  
-  
   complete = complete[! complete == 'DELETE']
   
   complete = unique(complete)
   
-  mens_competitors = complete
+  womens_competitors = complete
+  
 }
+setwd(wd)
+
+
+
+
+
+
 
 
 
