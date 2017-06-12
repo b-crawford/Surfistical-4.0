@@ -265,7 +265,8 @@ overall_score = function(parameters){
 overall_score(p1)
 
 
-
+# results = matrix(nrow = 10^5,ncol=13) # THIS WIPES RESULTS
+# results = data.frame(results)
 
 results = read.csv('results.csv', header=T)[,-1]
 start = which.max(is.na(results[,13]))

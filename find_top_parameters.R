@@ -13,4 +13,3 @@ p1 = c()
 for(i in 1:12){
   p1[i] = mean(find_top[1:10,i], na.rm=T)
 }
-
