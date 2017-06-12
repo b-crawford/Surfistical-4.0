@@ -188,6 +188,7 @@ predict_new = function(year, spot, parameters1, density_v1,competitors_vector){
   if(spot_index > 2){
     col_9 = matrix(year_0[,spot_index-1]/25, nrow = dim(year_0)[1], ncol=1)
     rownames(col_9) = rownames(year_0)
+    which_cols[9] = 1
     col_10 = matrix(year_0[,spot_index-2]/25, nrow = dim(year_0)[1], ncol=1)
     rownames(col_10) = rownames(year_0)
     which_cols[10] = 1

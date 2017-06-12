@@ -44,14 +44,18 @@ length(spots) - length(reef) - length(point) - length(beach) - length(unknown_ty
 
 source('find_top_parameters_W.R')
 p1
-p1 = replicate(1,12)
+
 
 # processing ----
 
 
 
 single_event = function(year, spot, parameters1, density_v1){
-  
+
+# year = 2017
+# spot = 'BellsBeach'
+# parameters1 = p1[1:10]
+# density_v1 = p1[11:12]
   
   setwd(paste(wd,'/Competitors_2/Womens',sep=''))
   competitors_vector = rownames(read.csv(paste(paste(spot,year,sep=''),'.csv',sep=''), row.names = 1, stringsAsFactors = F))
@@ -185,6 +189,7 @@ single_event = function(year, spot, parameters1, density_v1){
   if(spot_index > 2){
     col_9 = matrix(year_0[,spot_index-1]/25, nrow = dim(year_0)[1], ncol=1)
     rownames(col_9) = rownames(year_0)
+    which_cols[9] = 1
     col_10 = matrix(year_0[,spot_index-2]/25, nrow = dim(year_0)[1], ncol=1)
     rownames(col_10) = rownames(year_0)
     which_cols[10] = 1
@@ -245,7 +250,7 @@ single_event = function(year, spot, parameters1, density_v1){
   compare[25:dim(compare)[1],2] = 25
   
   
-  square_diff = sum((compare[,1]-compare[,2])^2)
+  square_diff = sum((compare[,1]-compare[,2])^2, na.rm = T)
   
   square_diff
   
