@@ -261,9 +261,9 @@ how_we_did = function(year, spot, parameters1, density_v1){
   compare[13:24,2] = 13
   compare[25:dim(compare)[1],2] = 25
   
-  title = paste(gsub('([[:upper:]])', ' \\1', spot), year)
+  title = paste('Mens',paste(gsub('([[:upper:]])', ' \\1', spot), year))
   
-  setwd(paste(wd,'/Mens-past',sep=''))
+  setwd(paste(webwd,'/Mens-past',sep=''))
   png(filename = paste(spot,year,sep=''),width = 1200,height = 600 )
   par(mar=c(6,6,6,6))
   plot(compare[,2],compare[,1], bty = 'l' , pch = 20, xlab = 'Prediction', ylab = 'Actual Result'
@@ -309,13 +309,13 @@ eg2[15] = 25
 
 
 
-setwd(paste(wd,'/Mens-past',sep=''))
+setwd(paste(webwd,'/Mens-past',sep=''))
 png(filename = 'Example',width = 1200,height = 600 )
 par(mar=c(6,6,6,6))
 plot(eg1,eg2, bty = 'l' , pch = 20, xlab = 'Prediction', ylab = 'Actual Result'
      , main = 'Example',cex.lab =3, cex = 2,cex.main =3, cex.axis = 2)
-abline(0,1, lty = 1, col = 'black', lwd =2)
-abline(lm(eg2~eg1), lty = 2, col = 'red', lwd = 2)
+abline(lm(eg2~eg1), lty = 1, col = 'black', lwd =2)
+abline(0,1, lty = 2, col = 'red', lwd = 2)
 dev.off()
 setwd(wd)
   

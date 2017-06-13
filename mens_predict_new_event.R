@@ -2,9 +2,8 @@ library(stats)
 library(tableHTML)
 library(magrittr)
 remove(list=ls(all=TRUE))
+source('wd.R')
 
-wd = '/Users/Billy/Surfistical 4.0'
-webwd = '/Users/Billy/Desktop/WHTcrawford.github.io'
 setwd(paste(wd,'/Mens',sep=''))
 whole2010 = read.csv('whole2010.csv', row.names = 1)
 whole2011 = read.csv('whole2011.csv', row.names = 1)
