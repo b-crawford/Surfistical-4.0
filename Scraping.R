@@ -7,7 +7,7 @@ library(rvest)
 
   remove(list=ls(all=TRUE))
 
-  wd = getwd()
+  source('wd.R')
   
   source('spot_names.R')
 
