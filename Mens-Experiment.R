@@ -1,7 +1,9 @@
 library(stats)
 remove(list=ls(all=TRUE))
+source('wd.R')
+setwd(wd)
 
-wd = getwd()
+
 setwd(paste(wd,'/Mens',sep=''))
 whole2010 = read.csv('whole2010.csv', row.names = 1)
 whole2011 = read.csv('whole2011.csv', row.names = 1)
@@ -46,11 +48,18 @@ heights = read.csv('Mean-Height.csv', row.names = 1)
 source('find_top_parameters.R')
 p1
 
+
 # processing ----
 
 
 
 single_event = function(year, spot, parameters1, density_v1){
+  
+  
+#  year = 2017
+#  spot = 'BellsBeach'
+#  parameters1 = p1[1:10]
+#  density_v1 = p1[11:12]
   
   
   setwd(paste(wd,'/Competitors_2/Mens',sep=''))
@@ -269,10 +278,16 @@ overall_score(p1)
 # results = matrix(nrow = 10^5,ncol=13) # THIS WIPES RESULTS
 # results = data.frame(results)
 
+repeats = 100
+time1 = Sys.time()
+for(j in 1:repeats){
+  
 results = read.csv('results.csv', header=T)[,-1]
 start = which.max(is.na(results[,13]))
-number = 1
+number = 100
 end = start + number - 1
+
+
 
 
 for(i in start:end){
@@ -296,9 +311,13 @@ for(i in start:end){
 
 write.csv(results,'results.csv')
 
-end
+source('find_top_parameters.R')
+print(overall_score(p1))
 
+print(Sys.time()-time1)
+print(end)
 
+}
 
 
 # potential issue, if a surfer has only been in one other contest which is similar to the 

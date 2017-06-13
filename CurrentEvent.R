@@ -101,7 +101,7 @@ start_day = unique(na.omit(as.numeric(unlist(strsplit(unlist(upcoming_date), "[^
 
 mens_go_time = 0
 
-if(start_month == month & start_day - 1 <= day){
+if(start_month == month & start_day - 1 == day){
   mens_go_time = 1
 }
 

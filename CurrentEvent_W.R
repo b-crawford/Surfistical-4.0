@@ -97,7 +97,7 @@ start_day = unique(na.omit(as.numeric(unlist(strsplit(unlist(upcoming_date), "[^
 
 womens_go_time = 0
 
-if(start_month == month & start_day - 1 <=day){
+if(start_month == month & start_day - 1 == day){
   womens_go_time = 1
 }
 

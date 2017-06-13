@@ -105,7 +105,6 @@ if(finished_month == month & finished_day + 10 >= day  & finished_day < day){
   mens_analyse_time = 1
 }
 
-mens_analyse_time = 1 # DELETE THIS
 
 
 
