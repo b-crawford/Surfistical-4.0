@@ -1,6 +1,6 @@
 library(rvest)
 library(magrittr)
-wd = '/Users/Billy/Surfistical 4.0'
+source('wd.R')
 setwd(wd)
 
 
@@ -9,44 +9,44 @@ setwd(wd)
 
 source('spot_names.R')
 
-# which month function -------
+# end month
 
-which_month = function(string){
-  if(grepl("Dec", x = string, fixed = T)==1){
-    return_number = 12
-  }
-  if(grepl("Nov", x = string, fixed = T)==1){
-    return_number = 11
-  }
-  if(grepl("Oct", x = string, fixed = T)==1){
-    return_number = 10
-  }
-  if(grepl("Sep", x = string, fixed = T)==1){
-    return_number = 9
-  }
-  if(grepl("Aug", x = string, fixed = T)==1){
-    return_number = 8
-  }
-  if(grepl("Jul", x = string, fixed = T)==1){
-    return_number = 7
-  }
-  if(grepl("Jun", x = string, fixed = T)==1){
-    return_number = 6
-  }
-  if(grepl("May", x = string, fixed = T)==1){
-    return_number = 5
-  }
-  if(grepl("Apr", x = string, fixed = T)==1){
-    return_number = 4
-  }
-  if(grepl("Mar", x = string, fixed = T)==1){
-    return_number = 3
+end_month = function(string){
+  if(grepl("Jan", x = string, fixed = T)==1){
+    return_number = 1
   }
   if(grepl("Feb", x = string, fixed = T)==1){
     return_number = 2
   }
-  if(grepl("Jan", x = string, fixed = T)==1){
-    return_number = 1
+  if(grepl("Mar", x = string, fixed = T)==1){
+    return_number = 3
+  }
+  if(grepl("Apr", x = string, fixed = T)==1){
+    return_number = 4
+  }
+  if(grepl("May", x = string, fixed = T)==1){
+    return_number = 5
+  }
+  if(grepl("Jun", x = string, fixed = T)==1){
+    return_number = 6
+  }
+  if(grepl("Jul", x = string, fixed = T)==1){
+    return_number = 7
+  }
+  if(grepl("Aug", x = string, fixed = T)==1){
+    return_number = 8
+  }
+  if(grepl("Sep", x = string, fixed = T)==1){
+    return_number = 9
+  }
+  if(grepl("Oct", x = string, fixed = T)==1){
+    return_number = 10
+  }
+  if(grepl("Nov", x = string, fixed = T)==1){
+    return_number = 11
+  }
+  if(grepl("Dec", x = string, fixed = T)==1){
+    return_number = 12
   }
   return(return_number)
 }
@@ -73,39 +73,41 @@ events4 = c()
 
 for(i in 1:length(events3)){
   if(grepl("Complete",x = events3[i], fixed = T)==1){
-    events4[i] = 0
+    events4[i] = 1
   }
   if(grepl("Upcoming",x = events3[i], fixed = T)==1){
-    events4[i] = 1 
+    events4[i] = 0 
   }
   if(grepl("Standby",x = events3[i], fixed = T)==1){
-    events4[i] = 1 
+    events4[i] = 0
   }
 }
 
 events4 = as.numeric(events4)
 
-upcoming_index = which(events4==1)[1]
+finished_index = which.max(which(events4==1))
 
 spots = html_nodes(events,'.tour-event-name')
 
 spots = html_text(spots) 
 
-upcoming_mens = spot_names(spots)[upcoming_index]
+finished = spot_names(spots)[finished_index]
 
-upcoming_date = events3[upcoming_index]
+finished_date = events3[finished_index]
 
-start_month = which_month(upcoming_date)
+finished_month = end_month(finished_date)
 
-start_day = unique(na.omit(as.numeric(unlist(strsplit(unlist(upcoming_date), "[^0-9]+")))))[1]
+finished_day = unique(na.omit(as.numeric(unlist(strsplit(unlist(finished_date), "[^0-9]+")))))[2]
 
-mens_go_time = 0
+mens_analyse_time = 0
 
-if(start_month == month & start_day - 1 <= day){
-  mens_go_time = 1
+if(finished_month == month & finished_day + 10 >= day  & finished_day < day){
+  mens_analyse_time = 1
 }
 
-if(mens_go_time == 1){
+mens_analyse_time = 1 # DELETE THIS
+
+if(mens_analyse_time == 1){
   # competitors list ------
   setwd(paste(wd,'/Mens',sep=''))
   names2010 = read.csv('whole2010.csv',stringsAsFactors = F)[,1]
@@ -145,7 +147,7 @@ if(mens_go_time == 1){
   
   s = html_session(event_url)
   
-  s = s %>% follow_link(spots[upcoming_index]) %>% follow_link("Results")
+  s = s %>% follow_link(spots[finished_index]) %>% follow_link("Results")
   
   comp = html_nodes(s,'.athlete-name')
   
@@ -164,6 +166,7 @@ if(mens_go_time == 1){
   
   mens_competitors = complete
 }
+
 
 
 
