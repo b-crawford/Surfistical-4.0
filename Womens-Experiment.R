@@ -273,10 +273,14 @@ overall_score(p1)
 # results = matrix(nrow = 10^5,ncol=13) # THIS WIPES RESULTS
 # results = data.frame(results)
 
+repeats = 1000
+
+for(j in 1:repeats){
+  
 
 results = read.csv('results_W.csv', header=T)[,-1]
 start = which.max(is.na(results[,13]))
-number = 1
+number = 10
 end = start + number - 1
 
 
@@ -300,10 +304,10 @@ for(i in start:end){
 
 
 write.csv(results,'results_W.csv')
+print(j)
 
-end
 
-
+}
 
 
 # potential issue, if a surfer has only been in one other contest which is similar to the 
