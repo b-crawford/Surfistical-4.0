@@ -2,7 +2,7 @@ remove(list=ls(all=TRUE))
 
 # Mens -------
 
-wd = getwd()
+source('wd.R')
 setwd(paste(wd,'/Mens',sep=''))
 whole2010 = read.csv('whole2010.csv', row.names = 1)
 whole2011 = read.csv('whole2011.csv', row.names = 1)

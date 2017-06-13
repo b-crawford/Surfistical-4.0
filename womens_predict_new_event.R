@@ -2,8 +2,7 @@ library(stats)
 library(tableHTML)
 remove(list=ls(all=TRUE))
 
-wd = '/Users/Billy/Surfistical 4.0'
-webwd = '/Users/Billy/Desktop/WHTcrawford.github.io'
+source('wd.R')
 setwd(paste(wd,'/Womens',sep=''))
 whole2010 = read.csv('whole2010.csv', row.names = 1)
 whole2011 = read.csv('whole2011.csv', row.names = 1)

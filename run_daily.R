@@ -6,7 +6,7 @@
 
 remove(list=ls(all=TRUE))
 
-setwd('/Users/Billy/Surfistical 4.0')
+setwd('/Users/Billy/Surfistical4.0')
 
 year = as.numeric(format(as.Date(Sys.time(), format="%d/%m/%Y"),"%Y"))
 
@@ -149,7 +149,7 @@ if(!exists('complete')){
 
 remove(list=ls(all=TRUE))
 
-setwd('/Users/Billy/Surfistical 4.0')
+setwd('/Users/Billy/Surfistical4.0')
 
 year = as.numeric(format(as.Date(Sys.time(), format="%d/%m/%Y"),"%Y"))
 

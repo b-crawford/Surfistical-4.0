@@ -1,6 +1,6 @@
 library(rvest)
 library(magrittr)
-wd = '/Users/Billy/Surfistical 4.0'
+source('wd.R')
 setwd(wd)
 
 

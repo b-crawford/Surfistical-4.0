@@ -1,8 +1,7 @@
 library(stats)
 remove(list=ls(all=TRUE))
 
-wd = '/Users/Billy/Surfistical 4.0'
-setwd(paste(wd,'/Womens',sep=''))
+source('wd.R')
 whole2010 = read.csv('whole2010.csv', row.names = 1)
 whole2011 = read.csv('whole2011.csv', row.names = 1)
 whole2012 = read.csv('whole2012.csv', row.names = 1)

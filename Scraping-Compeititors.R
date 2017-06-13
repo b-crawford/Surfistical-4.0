@@ -3,7 +3,7 @@ remove(list=ls(all=TRUE))
 library(rvest)
 library(magrittr)
 
-wd = getwd()
+source('wd.R')
 
 # Mens --------
 
