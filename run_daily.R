@@ -294,3 +294,4 @@ source('womens_predict_new_event.R')
 source('mens_how_we_did.R')
 source('womens_how_we_did.R')
 
+quit(save='no')
