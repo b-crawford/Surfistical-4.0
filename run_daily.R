@@ -1,12 +1,17 @@
 
 
 
-
 # collect newest data - Mens -------
 
 remove(list=ls(all=TRUE))
 
-setwd('/Users/Billy/Surfistical4.0')
+library(rvest)
+
+wd = '/Users/Billy/Surfistical4.0'
+
+setwd(wd)
+
+source('spot_names.R')
 
 year = as.numeric(format(as.Date(Sys.time(), format="%d/%m/%Y"),"%Y"))
 
@@ -149,7 +154,13 @@ if(!exists('complete')){
 
 remove(list=ls(all=TRUE))
 
-setwd('/Users/Billy/Surfistical4.0')
+library(rvest)
+
+wd = '/Users/Billy/Surfistical4.0'
+
+setwd(wd)
+
+source('spot_names.R')
 
 year = as.numeric(format(as.Date(Sys.time(), format="%d/%m/%Y"),"%Y"))
 

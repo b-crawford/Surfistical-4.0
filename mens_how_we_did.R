@@ -1,6 +1,7 @@
 library(stats)
 remove(list=ls(all=TRUE))
 source('wd.R')
+source('Competitors_2.R')
 setwd(wd)
 
 
@@ -64,7 +65,7 @@ how_we_did = function(year, spot, parameters1, density_v1){
   
   
 # year = 2017
-# spot = 'BellsBeach'
+# spot = 'Fiji'
 # parameters1 = p1[1:10]
 # density_v1 = p1[11:12]
   

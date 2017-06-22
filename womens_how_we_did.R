@@ -1,6 +1,7 @@
 library(stats)
 remove(list=ls(all=TRUE))
 source('wd.R')
+source('Competitors_2.R')
 setwd(wd)
 
 

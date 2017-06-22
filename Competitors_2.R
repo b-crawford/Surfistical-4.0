@@ -32,8 +32,10 @@ for(i in 1:dim(data_set)[2]){
 
 
 # Womens -----------
+remove(list=ls(all=TRUE))
 
-wd = getwd()
+
+source('wd.R')
 setwd(paste(wd,'/Womens',sep=''))
 whole2010 = read.csv('whole2010.csv', row.names = 1)
 whole2011 = read.csv('whole2011.csv', row.names = 1)
