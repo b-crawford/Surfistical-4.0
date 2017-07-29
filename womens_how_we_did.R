@@ -262,7 +262,7 @@ how_we_did = function(year, spot, parameters1, density_v1){
   compare[13:24,2] = 13
   compare[25:dim(compare)[1],2] = 25
   
-  title = paste('Womens',paste(gsub('([[:upper:]])', ' \\1', spot), year))
+  title = paste(gsub('([[:upper:]])', ' \\1', spot), year)
   
   setwd(paste(webwd,'/Womens-past',sep=''))
   png(filename = paste(spot,year,sep=''),width = 1200,height = 600 )

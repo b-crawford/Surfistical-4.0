@@ -314,9 +314,9 @@ write.csv(results,'results.csv')
 
 source('find_top_parameters.R')
 print(overall_score(p1))
-
-print(Sys.time()-time1)
 print(end)
+print(Sys.time())
+
 
 }
 

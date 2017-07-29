@@ -247,8 +247,8 @@ predict_new = function(year, spot, parameters1, density_v1,competitors_vector){
 if(womens_go_time == 1 ){
 table = predict_new(year, upcoming_womens, parameters1 = p1[1:10], density_v1 = p1[11:12], womens_competitors)
 table2 = matrix(nrow = length(womens_competitors), ncol = 2 )
-table2[,1] = rownames(table)
-table2[,2] = table[,1]
+table2[,1] = rownames(table)[1:length(womens_competitors)]
+table2[,2] = table[1:length(womens_competitors),1]
 colnames(table2) = c(paste(upcoming_womens,year),'Predicted Results')
 table2 = tableHTML(table2, rownames = F, border = 0, spacing  ='4px') 
 table2 = add_css_table(table2, list('font-family','Josefin Slab'))

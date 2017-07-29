@@ -2,6 +2,7 @@ library(stats)
 remove(list=ls(all=TRUE))
 
 source('wd.R')
+setwd(paste(wd,'/Womens',sep=''))
 whole2010 = read.csv('whole2010.csv', row.names = 1)
 whole2011 = read.csv('whole2011.csv', row.names = 1)
 whole2012 = read.csv('whole2012.csv', row.names = 1)
@@ -272,14 +273,14 @@ overall_score(p1)
 # results = matrix(nrow = 10^5,ncol=13) # THIS WIPES RESULTS
 # results = data.frame(results)
 
-repeats = 1000
+repeats = 100
 
 for(j in 1:repeats){
   
 
 results = read.csv('results_W.csv', header=T)[,-1]
 start = which.max(is.na(results[,13]))
-number = 10
+number = 100
 end = start + number - 1
 
 
@@ -303,8 +304,11 @@ for(i in start:end){
 
 
 write.csv(results,'results_W.csv')
-print(j)
 
+source('find_top_parameters_W.R')
+print(overall_score(p1))
+print(end)
+print(Sys.time())
 
 }
 
