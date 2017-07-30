@@ -65,12 +65,13 @@ p1
 
 how_we_did = function(year, spot, parameters1, density_v1){
   
-  
-# year = 2017
-# spot = 'Fiji'
-# parameters1 = p1[1:10]
-# density_v1 = p1[11:12]
-  
+
+if(0){  # create for a specific contest
+  year = 2017
+  spot = 'Jbay'
+  parameters1 = p1[1:10]
+  density_v1 = p1[11:12]
+}  
   
   setwd(paste(wd,'/Competitors_2/Mens',sep=''))
   competitors_vector = rownames(read.csv(paste(paste(spot,year,sep=''),'.csv',sep=''), row.names = 1, stringsAsFactors = F))
