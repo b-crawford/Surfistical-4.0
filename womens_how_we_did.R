@@ -1,4 +1,6 @@
 library(stats)
+library(stats)
+library(ggplot2)
 remove(list=ls(all=TRUE))
 source('wd.R')
 source('Competitors_2.R')
@@ -264,13 +266,18 @@ how_we_did = function(year, spot, parameters1, density_v1){
   
   title = paste(gsub('([[:upper:]])', ' \\1', spot), year)
   
+  
+  example = data.frame(x = compare[,2],y = compare[,1])
+  
   setwd(paste(webwd,'/Womens-past',sep=''))
-  png(filename = paste(spot,year,sep=''),width = 1200,height = 600 )
-  par(mar=c(6,6,6,6))
-  plot(compare[,2],compare[,1], bty = 'l' , pch = 20, xlab = 'Prediction', ylab = 'Actual Result'
-       , main = title,cex.lab =3, cex = 2,cex.main =3, cex.axis = 2)
-  abline(lm(compare[,1]~compare[,2]), lty = 1, col = 'black', lwd =2)
-  abline(0,1, lty = 2, col = 'red', lwd = 2)
+  png(filename = paste(spot,year,sep=''),width = 1400,height = 700, res = 200 )
+  ggplot(example, aes(x, y)) +
+    geom_count(col = hcl(h = 180, l = 65, c = 100))+ 
+    scale_size_continuous(range = c(1, 10),  breaks= c(1,2,5,10), name="Number of \nSurfers")+
+    geom_smooth(method='lm',formula=y~x, se  = F,col = hcl(h = 200 , l = 65, c = 100))+
+    geom_segment(aes(x = 1, y = 1, xend = 25, yend = 25), data = NULL, col = "darkgrey",lty=2)+
+    labs(x = "Predicted Result", y = "Actual Result", title =title)+
+    scale_y_continuous(breaks = c(0,5,15,20,25),limits = c(0,26))
   dev.off()
   setwd(wd)
   

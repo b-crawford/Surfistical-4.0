@@ -99,7 +99,7 @@ finished_month = end_month(finished_date)
 
 finished_day = unique(na.omit(as.numeric(unlist(strsplit(unlist(finished_date), "[^0-9]+")))))[2]
 
-mens_analyse_time = 0
+womens_analyse_time = 0
 
 if(finished_month == month & finished_day + 10 >= day  & finished_day < day){
   womens_analyse_time = 1
