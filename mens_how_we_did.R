@@ -264,7 +264,7 @@ how_we_did = function(year, spot, parameters1, density_v1){
   compare[13:24,2] = 13
   compare[25:dim(compare)[1],2] = 25
   
-  title = paste(gsub('([[:upper:]])', ' \\1', spot), year)
+  title1 = paste(gsub('([[:upper:]])', ' \\1', spot), year)
   
   example = data.frame(x = compare[,2],y = compare[,1])
   
@@ -276,8 +276,9 @@ how_we_did = function(year, spot, parameters1, density_v1){
     scale_size_continuous(range = c(1, 10),  breaks= c(1,2,5,10), name="Number of \nSurfers")+
     geom_smooth(method='lm',formula=y~x, se  = F,col = 'navyblue')+
     geom_segment(aes(x = 1, y = 1, xend = 25, yend = 25), data = NULL, col = "darkgrey",lty=2)+
-    labs(x = "Predicted Result", y = "Actual Result", title =title)+
-    scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))
+    labs(x = "Predicted Result", y = "Actual Result", title =title1)+
+    scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))+
+    theme(text=element_text(family="Josefin Slab"))
   dev.off()
 
   
@@ -329,7 +330,8 @@ ggplot(example, aes(x, y)) +
   geom_smooth(method='lm',formula=y~x, se  = F,col = 'navyblue')+
   geom_segment(aes(x = 1, y = 1, xend = 25, yend = 25), data = NULL, col = "darkgrey",lty=2)+
   labs(x = "Predicted Result", y = "Actual Result", title ="Example")+
-  scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))
+  scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))+
+  theme(text=element_text(family="Josefin Slab"))
 dev.off()
 setwd(wd)
 

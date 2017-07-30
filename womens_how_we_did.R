@@ -264,8 +264,7 @@ how_we_did = function(year, spot, parameters1, density_v1){
   compare[13:24,2] = 13
   compare[25:dim(compare)[1],2] = 25
   
-  title = paste(gsub('([[:upper:]])', ' \\1', spot), year)
-  
+  title1 = paste(gsub('([[:upper:]])', ' \\1', spot), year)
   
   example = data.frame(x = compare[,2],y = compare[,1])
   
@@ -276,8 +275,9 @@ how_we_did = function(year, spot, parameters1, density_v1){
     scale_size_continuous(range = c(1, 10),  breaks= c(1,2,5,10), name="Number of \nSurfers")+
     geom_smooth(method='lm',formula=y~x, se  = F,col = 'navyblue')+
     geom_segment(aes(x = 1, y = 1, xend = 25, yend = 25), data = NULL, col = "darkgrey",lty=2)+
-    labs(x = "Predicted Result", y = "Actual Result", title =title)+
-    scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))
+    labs(x = "Predicted Result", y = "Actual Result", title =title1)+
+    scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))+
+    theme(text=element_text(family="Josefin Slab"))
   dev.off()
   
   setwd(paste(wd,'/Womens-old-predictions',sep=''))
@@ -293,6 +293,41 @@ if(womens_analyse_time == 1 ){
   how_we_did(year,finished,parameters1 = p1[1:10],density_v1 = p1[11:12])
 }
 
+
+
+eg1 = c()
+eg1[1] = 1
+eg1[2] = 2
+eg1[3:4] = 3
+eg1[5:8] = 5
+eg1[9:12] = 9
+eg1[13:24] = 13
+eg1[25:36] = 25
+eg2 = eg1
+eg2[1] = 2
+eg2[2] = 1
+eg2[5] = 9
+eg2[8] = 25
+eg2[5] = 13
+eg2[30] = 9
+eg2[31] = 13
+eg2[14] = 5
+eg2[15] = 25
+example = data.frame(x = eg1,y = eg2)
+
+
+setwd(paste(webwd,'/Womens-past',sep=''))
+png(filename = 'Example',width = 1400,height = 700, res = 200 )
+ggplot(example, aes(x, y)) +
+  geom_count(col = hcl(h = 180, l = 65, c = 100))+ 
+  scale_size_continuous(range = c(1, 10),  breaks= c(1,2,5,10), name="Number of \nSurfers")+
+  geom_smooth(method='lm',formula=y~x, se  = F,col = 'navyblue')+
+  geom_segment(aes(x = 1, y = 1, xend = 25, yend = 25), data = NULL, col = "darkgrey",lty=2)+
+  labs(x = "Predicted Result", y = "Actual Result", title ="Example")+
+  scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))+
+  theme(text=element_text(family="Josefin Slab"))
+dev.off()
+setwd(wd)
 
 
 
