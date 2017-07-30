@@ -274,10 +274,10 @@ how_we_did = function(year, spot, parameters1, density_v1){
   ggplot(example, aes(x, y)) +
     geom_count(col = hcl(h = 180, l = 65, c = 100))+ 
     scale_size_continuous(range = c(1, 10),  breaks= c(1,2,5,10), name="Number of \nSurfers")+
-    geom_smooth(method='lm',formula=y~x, se  = F,col = hcl(h = 200 , l = 65, c = 100))+
+    geom_smooth(method='lm',formula=y~x, se  = F,col = 'navyblue')+
     geom_segment(aes(x = 1, y = 1, xend = 25, yend = 25), data = NULL, col = "darkgrey",lty=2)+
     labs(x = "Predicted Result", y = "Actual Result", title =title)+
-    scale_y_continuous(breaks = c(0,5,15,20,25),limits = c(0,26))
+    scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))
   dev.off()
   
   setwd(paste(wd,'/Womens-old-predictions',sep=''))
