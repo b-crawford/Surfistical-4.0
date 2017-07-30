@@ -266,6 +266,9 @@ how_we_did = function(year, spot, parameters1, density_v1){
   
   title = paste(gsub('([[:upper:]])', ' \\1', spot), year)
   
+  example = data.frame(x = compare[,2],y = compare[,1])
+  
+  
   setwd(paste(webwd,'/Mens-past',sep=''))
   png(filename = paste(spot,year,sep=''),width = 1400,height = 700, res = 200 )
   ggplot(example, aes(x, y)) +
@@ -276,8 +279,13 @@ how_we_did = function(year, spot, parameters1, density_v1){
     labs(x = "Predicted Result", y = "Actual Result", title =title)+
     scale_y_continuous(breaks = c(0,5,15,20,25),limits = c(0,26))
   dev.off()
-  setwd(wd)
+
   
+  setwd(paste(wd,'/Mens-old-predictions',sep=''))
+  colnames(example) = c('Prediction', 'Actual')
+  write.csv(example,paste(paste(spot,year,sep=''),'.csv',sep = ''))
+  
+  setwd(wd)
 }
 
 
