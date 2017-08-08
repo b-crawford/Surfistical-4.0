@@ -1,15 +1,11 @@
-table2 
+table2
+source('title_names.R')
 
 name = colnames(table2)[1]
 strsplit(name, ' ')[[1]][1] == 'USOpen'
 
 
-change_title = function(name){
-  if(strsplit(name, ' ')[[1]][1] == 'USOpen'){
-    return(paste('US Open',strsplit(name, ' ')[[1]][2], sep = ' '))
-  }
-  else(return(name))
-}
+
 
 tab = table2
 # change_format = function(tab){

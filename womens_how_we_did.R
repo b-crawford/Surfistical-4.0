@@ -4,6 +4,7 @@ library(ggplot2)
 remove(list=ls(all=TRUE))
 source('wd.R')
 source('Competitors_2.R')
+source('title_names.R')
 setwd(wd)
 
 
@@ -65,12 +66,11 @@ p1
 
 how_we_did = function(year, spot, parameters1, density_v1){
   
-  
+
 # year = 2017
-# spot = 'BellsBeach'
+# spot = 'USOpen'
 # parameters1 = p1[1:10]
 # density_v1 = p1[11:12]
-  
   
   setwd(paste(wd,'/Competitors_2/Womens',sep=''))
   competitors_vector = rownames(read.csv(paste(paste(spot,year,sep=''),'.csv',sep=''), row.names = 1, stringsAsFactors = F))
@@ -264,20 +264,27 @@ how_we_did = function(year, spot, parameters1, density_v1){
   compare[13:24,2] = 13
   compare[25:dim(compare)[1],2] = 25
   
-  title1 = paste(gsub('([[:upper:]])', ' \\1', spot), year)
+  title1 = paste(change_title(spot), year, sep =' ')
   
   example = data.frame(x = compare[,2],y = compare[,1])
   
+  example = example[!is.na(example[,1]),]
+  example = example[!is.na(example[,2]),]
+  
+  end = max(example[,2])
+  
   setwd(paste(webwd,'/Womens-past',sep=''))
   png(filename = paste(spot,year,sep=''),width = 1400,height = 700, res = 200 )
+  print(
   ggplot(example, aes(x, y)) +
     geom_count(col = hcl(h = 180, l = 65, c = 100))+ 
     scale_size_continuous(range = c(1, 10),  breaks= c(1,2,5,10), name="Number of \nSurfers")+
     geom_smooth(method='lm',formula=y~x, se  = F,col = 'navyblue')+
-    geom_segment(aes(x = 1, y = 1, xend = 25, yend = 25), data = NULL, col = "darkgrey",lty=2)+
+    geom_segment(aes(x = 1, y = 1, xend = end , yend = end), data = NULL, col = "darkgrey",lty=2)+
     labs(x = "Predicted Result", y = "Actual Result", title =title1)+
-    scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))+
+    scale_y_continuous(limits = c(0,end+1))+
     theme(text=element_text(family="Josefin Slab"))
+  )
   dev.off()
   
   setwd(paste(wd,'/Womens-old-predictions',sep=''))
