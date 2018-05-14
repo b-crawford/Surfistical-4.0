@@ -1,11 +1,8 @@
 library(stats)
-library(ggplot2)
-library(plyr)
+library(tableHTML)
+library(magrittr)
 remove(list=ls(all=TRUE))
 source('wd.R')
-source('Competitors_2.R')
-setwd(wd)
-
 
 setwd(paste(wd,'/Mens',sep=''))
 whole2010 = read.csv('whole2010.csv', row.names = 1)
@@ -18,14 +15,11 @@ whole2016 = read.csv('whole2016.csv', row.names = 1)
 whole2017 = read.csv('whole2017.csv', row.names = 1)
 setwd(wd)
 
+# current event --------
 
-# just ended event --------
-
-source('recently_ended_M.R')
+source('Current_testing.R')
 
 year = as.numeric(format(as.Date(Sys.time(), format="%d/%m/%Y"),"%Y"))
-
-
 
 # Spot characterstic lists  ----------
 spots = c()
@@ -59,24 +53,12 @@ source('find_top_parameters.R')
 p1
 
 
-# processing ----
+# predict
 
 
 
-how_we_did = function(year, spot, parameters1, density_v1){
-  
 
-if(0){  # create for a specific contest
-  year = 2017
-  spot = 'Tahiti'
-  parameters1 = p1[1:10]
-  density_v1 = p1[11:12]
-}  
-  
-  setwd(paste(wd,'/Competitors_2/Mens',sep=''))
-  competitors_vector = rownames(read.csv(paste(paste(spot,year,sep=''),'.csv',sep=''), row.names = 1, stringsAsFactors = F))
-  actual = read.csv(paste(paste(spot,year,sep=''),'.csv',sep=''), row.names = 1, stringsAsFactors = F)
-  setwd(wd)
+# predict_new = function(year, spot, parameters1, density_v1,competitors_vector){
   
   # data -------
   
@@ -249,109 +231,34 @@ if(0){  # create for a specific contest
   predict = predict + (density_v1[1] <= 4)*density_v1[2]
   predict = data.frame(predict)
   predict = predict[! rownames(predict) == 'NA' , , drop = F]
+  predict = predict[order(predict[,1]), ,drop = F]
   
-  compare = merge(actual,predict,by = 'row.names',all.x = T)
-  rownames(compare) = compare[,1]
-  compare = compare[,-1]
+  predict[1,1] = 1
+  predict[2,1] = 2
+  predict[3:4,1] = 3
+  predict[5:8,1] = 5
+  predict[9:12,1] = 9
+  predict[13:24,1] = 13
+  predict[25:dim(predict)[1],1] = 25
   
-  compare = compare[order(compare[,2]), ,drop = F]
-  compare
-  
-  compare[1,2] = 1
-  compare[2,2] = 2
-  compare[3:4,2] = 3
-  compare[5:8,2] = 5
-  compare[9:12,2] = 9
-  compare[13:24,2] = 13
-  compare[25:dim(compare)[1],2] = 25
-  
-  title1 = paste(gsub('([[:upper:]])', ' \\1', spot), year)
-  
-  example = data.frame(x = compare[,2],y = compare[,1])
-  
-  
-  setwd(paste(webwd,'/Mens-past',sep=''))
-  png(filename = paste(spot,year,sep=''),width = 1400,height = 700, res = 200 )
-  print(
-    ggplot(example, aes(x, y)) +
-      geom_count(col = hcl(h = 180, l = 65, c = 100))+ 
-      scale_size_continuous(range = c(1, 10),  breaks= c(1,2,5,10), name="Number of \nSurfers")+
-      geom_smooth(method='lm',formula=y~x, se  = F,col = 'navyblue')+
-      geom_segment(aes(x = 1, y = 1, xend = 25, yend = 25), data = NULL, col = "darkgrey",lty=2)+
-      labs(x = "Predicted Result", y = "Actual Result", title =title1)+
-      scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))+
-      theme(text=element_text(family="Josefin Slab"))
-  )
-  dev.off()
+  return(predict)
+}
 
-  
-  setwd(paste(wd,'/Mens-old-predictions',sep=''))
-  colnames(example) = c('Prediction', 'Actual')
-  write.csv(example,paste(paste(spot,year,sep=''),'.csv',sep = ''))
-  
+
+# mens ----
+if(mens_go_time == 1 ){
+  table = predict_new(year, upcoming_mens, parameters1 = p1[1:10], density_v1 = p1[11:12], mens_competitors)
+  table2 = matrix(nrow = length(mens_competitors), ncol = 2 )
+  table2[,1] = rownames(table)[1:length(mens_competitors)]
+  table2[,2] = table[1:length(mens_competitors),1]
+  colnames(table2) = c(paste(upcoming_mens,year),'Predicted Results')
+  table2 = tableHTML(table2, rownames = F, border = 0, spacing  ='4px') 
+  table2 = add_css_table(table2, list('font-family','Josefin Slab'))
+  table2 = add_css_column(table2, list('text-align', 'center'), 2)
+  table2 = add_css_header(table2, list('font-size', '20px'), c(1,2))
+  setwd(webwd)
+  write_tableHTML(table2,file = 'M_current_event.html')
   setwd(wd)
 }
-
-
-if(mens_analyse_time == 1 ){
-  how_we_did(year,finished,parameters1 = p1[1:10],density_v1 = p1[11:12])
-}
-
-
-
-
-
-
-  
-
-eg1 = c()
-eg1[1] = 1
-eg1[2] = 2
-eg1[3:4] = 3
-eg1[5:8] = 5
-eg1[9:12] = 9
-eg1[13:24] = 13
-eg1[25:36] = 25
-eg2 = eg1
-eg2[1] = 2
-eg2[2] = 1
-eg2[5] = 9
-eg2[8] = 25
-eg2[5] = 13
-eg2[30] = 9
-eg2[31] = 13
-eg2[14] = 5
-eg2[15] = 25
-example = data.frame(x = eg1,y = eg2)
-
-
-setwd(paste(webwd,'/Mens-past',sep=''))
-png(filename = 'Example',width = 1400,height = 700, res = 200 )
-ggplot(example, aes(x, y)) +
-  geom_count(col = hcl(h = 180, l = 65, c = 100))+ 
-  scale_size_continuous(range = c(1, 10),  breaks= c(1,2,5,10), name="Number of \nSurfers")+
-  geom_smooth(method='lm',formula=y~x, se  = F,col = 'navyblue')+
-  geom_segment(aes(x = 1, y = 1, xend = 25, yend = 25), data = NULL, col = "darkgrey",lty=2)+
-  labs(x = "Predicted Result", y = "Actual Result", title ="Example")+
-  scale_y_continuous(breaks = c(0,5,10,15,20,25),limits = c(0,26))+
-  theme(text=element_text(family="Josefin Slab"))
-dev.off()
-setwd(wd)
-
-
-
-
-# setwd(paste(webwd,'/Mens-past',sep=''))
-#png(filename = 'Example',width = 1200,height = 600 )
-#par(mar=c(6,6,6,6))
-#plot(eg1,eg2, bty = 'l' , pch = 20, xlab = 'Prediction', ylab = 'Actual Result'
- #    , main = 'Example',cex.lab =3, cex = 2,cex.main =3, cex.axis = 2)
-#abline(lm(eg2~eg1), lty = 1, col = 'black', lwd =2)
-#abline(0,1, lty = 2, col = 'red', lwd = 2)
-#dev.off()
-# setwd(wd)
-  
-
-
 
 

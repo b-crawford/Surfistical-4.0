@@ -99,9 +99,11 @@ finished_month = end_month(finished_date)
 
 finished_day = unique(na.omit(as.numeric(unlist(strsplit(unlist(finished_date), "[^0-9]+")))))[2]
 
+start_day = unique(na.omit(as.numeric(unlist(strsplit(unlist(finished_date), "[^0-9]+")))))[1]
+
 mens_analyse_time = 0
 
-if(finished_month == month & finished_day + 10 >= day  & finished_day < day){
+if(finished_month == month & finished_day + 10 >= day  & start_day+2 < day){
   mens_analyse_time = 1
 }
 

@@ -246,7 +246,10 @@ predict_new = function(year, spot, parameters1, density_v1,competitors_vector){
 
 
 # mens ----
-if(mens_go_time == 1 ){
+text_rather_than_table = 0
+
+if(mens_go_time == 1 & text_rather_than_table == 0){
+  last_updated = format(Sys.Date(), '%dth %B %Y')
   table = predict_new(year, upcoming_mens, parameters1 = p1[1:10], density_v1 = p1[11:12], mens_competitors)
   table2 = matrix(nrow = length(mens_competitors), ncol = 2 )
   table2[,1] = rownames(table)[1:length(mens_competitors)]
@@ -256,9 +259,44 @@ if(mens_go_time == 1 ){
   table2 = add_css_table(table2, list('font-family','Josefin Slab'))
   table2 = add_css_column(table2, list('text-align', 'center'), 2)
   table2 = add_css_header(table2, list('font-size', '20px'), c(1,2))
+  
+  
   setwd(webwd)
   write_tableHTML(table2,file = 'M_current_event.html')
   setwd(wd)
 }
 
+
+
+if(mens_go_time == 1 & text_rather_than_table == 1){
+  last_updated = format(Sys.Date(), '%dth %B %Y')
+  table = predict_new(year, upcoming_mens, parameters1 = p1[1:10], density_v1 = p1[11:12], mens_competitors)
+  table2 = matrix(nrow = length(mens_competitors), ncol = 2 )
+  table2[,1] = rownames(table)[1:length(mens_competitors)]
+  table2[,2] = table[1:length(mens_competitors),1]
+  text = c()
+  text[1] = paste('For ',paste(upcoming_mens,year),sep = '')
+  text[2] = 'we predict that'
+  text[3] =  table2[1,1] 
+  text[4] = 'will finish in 1st place. Followed by'
+  text[5] = table2[2,1] 
+  text[6] = 'in 2nd place. We believe'
+  text[7] = paste(table2[3:4,1], collapse = ' and ')
+  text[8] = 'will be knocked out in the semi finals. According to our model'
+  text[9] = paste(paste(table2[5:7,1], collapse = ', '),table2[8,1], sep = ' and ')
+  text[10] = 'will be knocked out in the quarters. We predict'
+  text[11] = paste(paste(table2[9:11,1], collapse = ', '),table2[12,1], sep = ' and ')
+  text[12] = 'will finish in 9th place. Followed by'
+  text[13] = paste(paste(table2[13:23,1], collapse = ', '),table2[24,1], sep = ' and ')
+  text[14] = 'in 13th. Finally'
+  text[15] = paste(paste(table2[25:dim(table2)[1],1], collapse = ', '),table2[dim(table2)[1],1], sep = ' and ')
+  text[14] = 'are predicted to finish in 25th place. '
+  
+  ret_text = paste(text, collapse =' ')
+  
+  setwd(webwd)
+  write.table(ret_text, 'M_current_event.html')
+  write.table(as.character(last_updated), 'last_updated.html')
+  setwd(wd)
+}
 
